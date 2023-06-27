@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    restart: on-failure
+    build: .
+    env_file:
+      - ./.env
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT}:8000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  pgdata:
